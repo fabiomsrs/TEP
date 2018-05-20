@@ -1,10 +1,43 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
-from .models import Game
+from .models import Game, GameCategory, Score, Player
 
-class GameSerializer(serializers.ModelSerializer):
-	name = serializers.CharField(max_length=200, validators=[UniqueValidator(queryset=Game.objects.all())])
-	game_category = serializers.CharField(max_length=200, allow_blank=False)
+class GameSerializer(serializers.HyperlinkedModelSerializer):
+	game_category =serializers.SlugRelatedField(queryset=GameCategory.objects.all(), slug_field='name')
+
 	class Meta:
 		model = Game
-		fields = ('id','name', 'release_date', 'game_category')		
+		fields = ('url','name', 'release_date', 'game_category')
+
+
+class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = GameCategory
+		fields = ('url','pk', 'name', 'games')
+
+
+class ScoreSerializer(serializers.HyperlinkedModelSerializer):
+	game =serializers.SlugRelatedField(queryset=Game.objects.all(),slug_field='name')
+	player =serializers.SlugRelatedField(queryset=Player.objects.all(),slug_field='name')
+
+	class Meta:
+		model = Score
+		fields = (
+		'url',
+		'pk',
+		'score',
+		'score_date',
+		'player',
+		'game',
+		)
+
+
+class PlayerSerializer(serializers.HyperlinkedModelSerializer):
+	scores = ScoreSerializer(many=True, read_only=True)
+	class Meta:
+		model = Player
+		fields = (
+		'url',
+		'name',
+		'gender',
+		'scores',
+		)
