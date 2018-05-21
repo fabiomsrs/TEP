@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Game, GameCategory, Score, Player
+from datetime import datetime
+from django.utils import timezone
 
 class GameSerializer(serializers.HyperlinkedModelSerializer):
 	game_category =serializers.SlugRelatedField(queryset=GameCategory.objects.all(), slug_field='name')
@@ -18,6 +20,14 @@ class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
 class ScoreSerializer(serializers.HyperlinkedModelSerializer):
 	game =serializers.SlugRelatedField(queryset=Game.objects.all(),slug_field='name')
 	player =serializers.SlugRelatedField(queryset=Player.objects.all(),slug_field='name')
+
+	def validate(self, data):
+		date_now = timezone.make_aware(datetime.now(), timezone.get_current_timezone())
+
+		if data['score'] < 0:
+			raise serializers.ValidationError('Score não pode ser negativo')
+		if data['score_date'] > date_now:
+			raise serializers.ValidationError('Data do score não pode estar no futuro!')
 
 	class Meta:
 		model = Score

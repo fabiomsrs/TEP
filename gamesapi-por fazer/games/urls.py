@@ -6,16 +6,16 @@ Publisher: Packt Publishing Ltd. - http://www.packtpub.com
 """
 from django.urls import path
 from games import views
-from games.models import Game
-from games.serializers import GameSerializer
+from games.models import Game, GameCategory, Score, Player
+from games.serializers import GameSerializer, GameCategorySerializer, PlayerSerializer, ScoreSerializer
 
 urlpatterns = [
-    path('games/', views.GameList.as_view(), name=views.GameList.name),
-    path('games/<int:pk>/', views.GameDetail.as_view(), name=views.GameDetail.name),
-    path('game-categories/', views.GameCategoryList.as_view(), name=views.GameCategoryList.name),
-    path('game-categories/<int:pk>/', views.GameCategoryDetail.as_view(), name=views.GameCategoryDetail.name),
-    path('players/', views.PlayerList.as_view(), name=views.PlayerList.name),
-	path('players/<int:pk>/', views.PlayerDetail.as_view(), name=views.PlayerDetail.name),
-	path('scores/', views.ScoreList.as_view(), name=views.ScoreList.name),
-	path('scores/<int:pk>/', views.ScoreDetail.as_view(), name=views.ScoreDetail.name),
+    path('games/', views.ViewList.as_view(queryset=Game.objects.all(), serializer_class=GameSerializer), name='game-list'),
+    path('games/<int:pk>/', views.ViewDetail.as_view(queryset=Game.objects.all(), serializer_class=GameSerializer), name='game-detail'),
+    path('game-categories/', views.ViewList.as_view(queryset=GameCategory.objects.all(), serializer_class=GameCategorySerializer), name='gamecategory-list'),
+    path('game-categories/<int:pk>/', views.ViewDetail.as_view(queryset=GameCategory.objects.all(), serializer_class=GameCategorySerializer), name='gamecategory-detail'),
+    path('players/', views.ViewList.as_view(queryset=Player.objects.all(), serializer_class=PlayerSerializer), name='player-list'),
+	path('players/<int:pk>/', views.ViewDetail.as_view(queryset=Player.objects.all(), serializer_class=PlayerSerializer), name='player-detail'),
+	path('scores/', views.ViewList.as_view(queryset=Score.objects.all(), serializer_class=ScoreSerializer), name='score-list'),
+	path('scores/<int:pk>/', views.ViewDetail.as_view(queryset=Score.objects.all(), serializer_class=ScoreSerializer), name='score-detail'),
 	]
