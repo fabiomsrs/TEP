@@ -17,11 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested import routers
-from core.views import Profiles,ProfilePosts,Posts,Comments
+from core.views import Profiles,ProfileDetails,ProfilePosts,Posts,Comments
 
 router = DefaultRouter()
 router.register(r'profiles',Profiles,base_name='profiles')
 router.register(r'profile-posts',ProfilePosts)
+router.register(r'profile-details',ProfileDetails)
 router.register(r'posts',Posts)
 router.register(r'comments',Comments)
 

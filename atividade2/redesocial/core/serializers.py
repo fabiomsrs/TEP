@@ -34,3 +34,21 @@ class ProfilePostsSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = User
 		fields = ('pk','name', 'username', 'email','posts')
+
+
+class ProfileDetailSerializer(serializers.HyperlinkedModelSerializer):	
+	posts = serializers.SerializerMethodField('get_total_posts')
+	comments = serializers.SerializerMethodField('get_total_comments')
+
+	def get_total_posts(self, obj):
+		return obj.posts.all().count()
+
+	def get_total_comments(self, obj):
+		count = 0
+		for post in obj.posts.all():
+			count += post.comments.all().count()
+		return count
+
+	class Meta:
+		model = User
+		fields = ('pk','name','posts','comments')
