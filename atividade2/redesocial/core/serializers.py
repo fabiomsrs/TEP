@@ -10,32 +10,27 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 		fields = ('pk','name','email','body','post',)
 
 
-class PostListSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.HyperlinkedModelSerializer):
 	user = serializers.SlugRelatedField(queryset=User.objects.all(),slug_field='name')
-	
-	class Meta:
-		model = Post
-		fields = ('url','pk', 'title','body', 'user')
-	
-
-class PostDetailSerializer(serializers.HyperlinkedModelSerializer):
-	user = serializers.SlugRelatedField(queryset=User.objects.all(),slug_field='name')
-	comments = CommentSerializer(many=True)	
+	comments = serializers.SerializerMethodField(method_name='quantidade_comentarios')
 
 	class Meta:
 		model = Post
-		fields = ('pk', 'title','body', 'user','comments')
+		fields = ('url','pk','title','body','user','comments')
 
+	def quantidade_comentarios(self, obj):
+		return obj.comments.all().count()
+	
 
-class UserListSerializer(serializers.HyperlinkedModelSerializer):	
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):	
 	
 	class Meta:
 		model = User
 		fields = ('url','pk','name', 'username', 'email')
 
 
-class UserDetailSerializer(serializers.HyperlinkedModelSerializer):	
-	posts = PostListSerializer(many=True)
+class ProfilePostsSerializer(serializers.HyperlinkedModelSerializer):	
+	posts = PostSerializer(many=True)
 	class Meta:
 		model = User
 		fields = ('pk','name', 'username', 'email','posts')

@@ -16,15 +16,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from core.views import Users, Posts, Comments
+from rest_framework_nested import routers
+from core.views import Profiles,ProfilePosts,Posts,Comments
 
 router = DefaultRouter()
-router.register(r'users',Users)
+router.register(r'profiles',Profiles,base_name='profiles')
+router.register(r'profile-posts',ProfilePosts)
 router.register(r'posts',Posts)
 router.register(r'comments',Comments)
+
+profiles_router = routers.NestedSimpleRouter(router, r'profiles', lookup='profile')
+profiles_router.register(r'posts',Posts)
+posts_router = routers.NestedSimpleRouter(profiles_router, r'posts', lookup='post')
+posts_router.register(r'comments',Comments)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
 urlpatterns += router.urls
+urlpatterns += profiles_router.urls
+urlpatterns += posts_router.urls

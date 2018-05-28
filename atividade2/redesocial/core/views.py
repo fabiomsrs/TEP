@@ -1,29 +1,36 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from .serializers import UserListSerializer, UserDetailSerializer, PostListSerializer, PostDetailSerializer, CommentSerializer
+from .serializers import ProfileSerializer, ProfilePostsSerializer, PostSerializer, CommentSerializer
 from .models import User, Post, Comment
 # Create your views here.
 
-class Users(ModelViewSet):
+class Profiles(ModelViewSet):
 	queryset = User.objects.all()
-	serializer_class = UserListSerializer
+	serializer_class = ProfileSerializer
 
-	def get_serializer_class(self):			
-		if self.action == 'retrieve':
-			return UserDetailSerializer
-		return UserListSerializer
+
+class ProfilePosts(ModelViewSet):
+	queryset = User.objects.all()
+	serializer_class = ProfilePostsSerializer
 
 class Posts(ModelViewSet):
 	queryset = Post.objects.all()
-	serializer_class = PostListSerializer
+	serializer_class = PostSerializer	
 
-	def get_serializer_class(self):			
-		if self.action == 'retrieve':
-			return PostDetailSerializer
-		return PostListSerializer
+	def get_queryset(self):
+		try: 
+			return Post.objects.filter(user=self.kwargs['profile_pk'])
+		except KeyError:
+			return Post.objects.all()
 
 
 class Comments(ModelViewSet):
 	queryset = Comment.objects.all()
 	serializer_class = CommentSerializer
+
+	def get_queryset(self):
+		try: 
+			return Comment.objects.filter(post=self.kwargs['post_pk'])
+		except KeyError:
+			return Comment.objects.all()
