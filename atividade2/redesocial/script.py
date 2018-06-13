@@ -8,12 +8,14 @@ def main():
 	from core.models import User,Address,Comment,Post
 
 	file = open('./db.json')
-	data = json.load(file)
+	data = json.load(file)	
 	for user in data['users']:
+		print()
 		if not User.objects.filter(pk=user['id']).exists():
 			User.objects.create(pk=user['id'],
 				name=user['name'],
 				email=user['email'],
+				username=user['username'],
 				address=Address.objects.create(street=user['address']['street'],suite=user['address']['suite'],city=user['address']['city'],zipcode=user['address']['zipcode']))
 
 	print('Usuario criados\n')

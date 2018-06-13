@@ -1,10 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class User(models.Model):
-	name = models.CharField(max_length=70)
-	username = models.CharField(max_length=45)
-	email = models.CharField(max_length=70)
+class User(AbstractUser):
+	name = models.CharField(max_length=70)	
 	address = models.OneToOneField('Address',related_name='user' ,null=True ,on_delete=models.SET_NULL)
 
 
