@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested import routers
-from core.views import Profiles,ProfileDetails,ProfilePosts,Posts,Comments
+from core.views import Profiles,ProfileDetails,ProfilePosts,Posts,Comments,CustomAuthToken
 
 router = DefaultRouter()
 router.register(r'profiles',Profiles,base_name='profiles')
@@ -32,7 +32,8 @@ posts_router = routers.NestedSimpleRouter(profiles_router, r'posts', lookup='pos
 posts_router.register(r'comments',Comments)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),    
+    path('api-token-auth/', CustomAuthToken.as_view())
 ]
 
 urlpatterns += router.urls
