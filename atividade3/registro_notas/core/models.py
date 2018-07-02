@@ -7,11 +7,13 @@ class CustomUser(AbstractUser):
 
 
 class Professor(CustomUser):
-	pass
+	name = models.CharField(max_length = 75)
+	degree = models.CharField(max_length = 30)
 
 
 class Student(CustomUser):
-	pass
+	name = models.CharField(max_length = 75)
+	
 
 
 class Discipline(models.Model):
@@ -21,5 +23,11 @@ class Discipline(models.Model):
 
 class Grade(models.Model):
 	value = models.FloatField()
+	year = models.IntegerField()
+	semester = models.IntegerField()
 	discipline = models.ForeignKey('Discipline', related_name='grades', on_delete=models.CASCADE)	
 	student = models.ForeignKey('Student', related_name='grades', on_delete=models.CASCADE)
+
+	# def save(self):
+	# 	if self.discipline in [grade.discipline for grade in Grade.objects.filter(student=self.student)]:
+	# 		pass
