@@ -7,13 +7,11 @@ class CustomUser(AbstractUser):
 
 
 class Professor(CustomUser):
-	name = models.CharField(max_length = 75)
 	degree = models.CharField(max_length = 30)
 
 
 class Student(CustomUser):
-	name = models.CharField(max_length = 75)
-	
+	pass	
 
 
 class Discipline(models.Model):

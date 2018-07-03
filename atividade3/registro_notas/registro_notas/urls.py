@@ -15,24 +15,38 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_swagger.views import get_swagger_view
 from rest_framework_nested import routers
 from rest_framework.routers import DefaultRouter
+from rest_framework_nested import routers
 from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
-from core.views import StudentView, ProfessorView, DisciplineView, GradeView
+# from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
+from core.views import StudentView, ProfessorView, DisciplineView, GradeDisciplineView, GradeStudentView
 
 
 router = DefaultRouter()
 router.register(r'students', StudentView)
 router.register(r'professors', ProfessorView)
 router.register(r'disciplines', DisciplineView)
-router.register(r'grades', GradeView)
+router.register(r'grades', GradeDisciplineView)
 
+# NESTED URLS-----------------------------------------
+dicipline_router = routers.NestedSimpleRouter(router, r'disciplines', lookup='discipline')
+dicipline_router.register(r'grades', GradeDisciplineView)
+student_router = routers.NestedSimpleRouter(router, r'students', lookup='student')
+student_router.register(r'grades', GradeStudentView)
+#-----------------------------------------------------
+
+schema_view = get_swagger_view(title='Grade Register API')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api-docs/', schema_view),
+    path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 urlpatterns += router.urls 
+urlpatterns += dicipline_router.urls 
+urlpatterns += student_router.urls 
