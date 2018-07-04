@@ -27,8 +27,8 @@ class Discipline(models.Model):
 
 class Grade(models.Model):
 	value = models.FloatField()
-	year = models.IntegerField()
-	semester = models.IntegerField()
+	year = models.IntegerField(null = True)
+	semester = models.IntegerField(null = True)
 	discipline = models.ForeignKey('Discipline', related_name='grades', on_delete=models.CASCADE)	
 	student = models.ForeignKey('Student', related_name='grades', on_delete=models.CASCADE)
 
