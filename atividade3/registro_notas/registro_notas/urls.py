@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework_nested import routers
 from rest_framework.routers import DefaultRouter
@@ -42,7 +42,11 @@ schema_view = get_swagger_view(title='Grade Register API')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-docs/', schema_view),
+
+    #urls oauth2
     path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+    # urls jwt
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

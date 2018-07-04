@@ -7,11 +7,17 @@ class CustomUser(AbstractUser):
 
 
 class Professor(CustomUser):
-	degree = models.CharField(max_length = 30)
+	degree = models.CharField(max_length = 30, null=True)
 
+	class Meta:
+		verbose_name = 'Professors'
+		verbose_name_plural = 'Professors'
 
 class Student(CustomUser):
-	pass	
+	
+	class Meta:
+		verbose_name = 'Student'
+		verbose_name_plural = 'Students'
 
 
 class Discipline(models.Model):

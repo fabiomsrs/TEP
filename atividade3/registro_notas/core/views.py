@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import permissions, mixins
@@ -10,6 +11,10 @@ from .serializers import StudentSerializers, ProfessorSerializers, DisciplineSer
 class StudentView(ModelViewSet):
 	queryset = Student.objects.all()
 	serializer_class = StudentSerializers
+	filter_backends = (DjangoFilterBackend,)
+	filter_fields = ('name',)
+	search_fields =	('^username',)
+	ordering_fields = ('name',)
 
 	def get_permissions(self):    
 		if self.request.method in permissions.SAFE_METHODS:	
@@ -20,6 +25,10 @@ class StudentView(ModelViewSet):
 class ProfessorView(ModelViewSet):
 	queryset = Professor.objects.all()
 	serializer_class = ProfessorSerializers
+	filter_backends = (DjangoFilterBackend,)
+	filter_fields = ('name',)
+	search_fields =	('^username',)
+	ordering_fields = ('name',)
 
 	def get_permissions(self):    
 		if self.request.method in permissions.SAFE_METHODS:	
@@ -48,13 +57,16 @@ class GradeDisciplineView(ModelViewSet):
 			return Grade.objects.all()
 
 	def get_permissions(self):
-		if not str(self.request.user.pk) == self.kwargs['discipline_pk']:
-			if self.request.method in permissions.SAFE_METHODS:		
-				return [IsProfessor(),]		
+		try:
+			if not self.request.user.pk == Discipline.objects.get(pk=self.kwargs['discipline_pk']).professor.pk:
+				if self.request.method in permissions.SAFE_METHODS:		
+					return [IsProfessor(),]		
+				else:
+					return [IsNotAllowed(),]
 			else:
-				return [IsNotAllowed(),]
-		else:
-			return [IsProfessor(),]		
+				return [IsProfessor(),]		
+		except:
+			return [IsNotAllowed(),]
 
 
 class GradeStudentView(GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
