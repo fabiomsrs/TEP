@@ -17,10 +17,10 @@ class StudentView(ModelViewSet):
 	search_fields =	('^username',)
 	ordering_fields = ('name',)
 
-	def get_permissions(self):    
-		if self.request.method in permissions.SAFE_METHODS:	
-			return [permissions.AllowAny(),]
-		return [permissions.IsAdminUser(),]
+	# def get_permissions(self):    
+	# 	if self.request.method in permissions.SAFE_METHODS:	
+	# 		return [permissions.AllowAny(),]
+	# 	return [permissions.IsAdminUser(),]
 
 
 class ProfessorView(ModelViewSet):
@@ -57,17 +57,17 @@ class GradeDisciplineView(ModelViewSet):
 		except KeyError:
 			return Grade.objects.all()
 
-	def get_permissions(self):
-		try:
-			if not self.request.user.pk == Discipline.objects.get(pk=self.kwargs['discipline_pk']).professor.pk:
-				if self.request.method in permissions.SAFE_METHODS:		
-					return [IsProfessor(),]		
-				else:
-					return [IsNotAllowed(),]
-			else:
-				return [IsProfessor(),]		
-		except:
-			return [IsProfessor(),]	
+	# def get_permissions(self):
+	# 	try:
+	# 		if not self.request.user.pk == Discipline.objects.get(pk=self.kwargs['discipline_pk']).professor.pk:
+	# 			if self.request.method in permissions.SAFE_METHODS:		
+	# 				return [IsProfessor(),]		
+	# 			else:
+	# 				return [IsNotAllowed(),]
+	# 		else:
+	# 			return [IsProfessor(),]		
+	# 	except:
+	# 		return [IsProfessor(),]	
 
 
 class GradeStudentView(GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
