@@ -80,13 +80,13 @@ class GradeStudentView(GenericViewSet, mixins.ListModelMixin, mixins.RetrieveMod
 		except KeyError:
 			return Grade.objects.all()
 
-	def get_permissions(self):		
-		try:				
-			if not str(self.request.user.pk) == self.kwargs['student_pk']:
-				return [IsNotAllowed(),]				
-			return []
-		except:
-			return []
+	# def get_permissions(self):		
+	# 	try:				
+	# 		if not str(self.request.user.pk) == self.kwargs['student_pk']:
+	# 			return [IsNotAllowed(),]				
+	# 		return []
+	# 	except:
+	# 		return []
 		
 
 

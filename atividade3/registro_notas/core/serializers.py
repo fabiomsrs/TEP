@@ -27,8 +27,13 @@ class DisciplineSerializers(serializers.HyperlinkedModelSerializer):
 
 class GradeSerializers(serializers.HyperlinkedModelSerializer):
 	discipline = serializers.SlugRelatedField(queryset = Discipline.objects.all(),slug_field='name')
-	student = serializers.SlugRelatedField(queryset = Student.objects.all(),slug_field='name')
+	professor = serializers.SerializerMethodField()
+	student = serializers.SlugRelatedField(queryset = Student.objects.all(),slug_field='name')	
 
 	class Meta:
 		model = Grade
-		fields = ('url','pk','value','discipline','student')
+		fields = ('pk','value','professor','discipline','student')
+
+	def get_professor(self, obj):		
+		qs = Professor.objects.get(pk=obj.discipline.professor.pk)		
+		return qs.name
