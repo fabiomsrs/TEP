@@ -55,7 +55,7 @@ export default {
   data () { 
     return {    
         user: {'username':null,'password':null},
-        newStudent: {'firstname': null, 'username': null,'email':null, 'password': null},
+        newStudent: {'firstname': '', 'username': '','email':'', 'password': ''},
         loading: true,
         errored: false
     }
@@ -64,7 +64,7 @@ export default {
   createStudent() {
   this.loading = true;
   axios
-  .post('http://localhost:8000/students/',this.newStudent, {headers: { "content-type": "application/json", "Authorization" : "Token " + JSON.parse(this.$cookie.get("user-token")).token}})
+  .post('http://localhost:8000/students/',this.newStudent, {headers: {"content-type": "application/json", "Authorization" : "Token " + JSON.parse(this.$cookie.get("user-token")).token}})
       .then((response) => {        
         this.loading = false;        
       })

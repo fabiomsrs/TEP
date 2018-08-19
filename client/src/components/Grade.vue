@@ -23,7 +23,8 @@ data () {
 },
 mounted () {
   axios
-    .get('http://localhost:8000/grades/')
+    .get('http://localhost:8000/grades/', {
+      headers: { "content-type": "application/json", "Authorization" :  "Token " + JSON.parse(this.$cookie.get("user-token")).token}})
     .then(response => {
       this.loading = false
       console.log(response.data)
