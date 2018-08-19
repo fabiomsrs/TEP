@@ -6,8 +6,9 @@ class CustomUser(AbstractUser):
 	name = models.CharField(max_length=70)
 
 	def save(self, *args, **kwargs):
+		print("@@@@@@@@@",self.username)
 		if not self.has_usable_password():
-			self.set_password(self.password)
+			self.set_password(self.password)			
 		super(CustomUser, self).save(*args, **kwargs)
 
 
