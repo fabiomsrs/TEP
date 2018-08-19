@@ -43,13 +43,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-docs/', schema_view),
     path('api-auth/', include('rest_framework.urls')),
-
-    # urls oauth2
-    path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('api/token/', obtain_auth_token)
+    # # urls oauth2
+    # path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
     # urls jwt
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 urlpatterns += router.urls 

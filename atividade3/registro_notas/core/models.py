@@ -3,7 +3,12 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class CustomUser(AbstractUser):
-	name = models.CharField(max_length=70)	
+	name = models.CharField(max_length=70)
+
+	def save(self, *args, **kwargs):
+		if not self.has_usable_password():
+			self.set_password(self.password)
+		super(CustomUser, self).save(*args, **kwargs)
 
 
 class Professor(CustomUser):
