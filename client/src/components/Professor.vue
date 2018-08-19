@@ -26,7 +26,7 @@
 		    }),	    
 		  mounted () {
 		    axios
-		      .get('http://localhost/professors/')
+		      .get('http://localhost:8000/professors/')
 		      .then(response => {
 		      	this.loading = false
 		      	console.log(response.data)

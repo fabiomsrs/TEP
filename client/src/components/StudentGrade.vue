@@ -23,9 +23,11 @@ data () {
 	}
 },
 created(){
+  console.log("Authorization"  +  "Token " + JSON.parse(this.$cookie.get("user-token")).token)
 	axios
-	.get("http://localhost/students/"+ this.id + "/grades/").then(response => {
-      	this.loading = false
+	.get("http://localhost:8000/students/"+ this.id + "/grades/", {
+      headers: { "content-type": "application/json", "Authorization" :  "Token " + JSON.parse(this.$cookie.get("user-token")).token}}).then(response => {
+      	this.loading = false        
       	console.log(response.data)
         this.info = response.data.results
       })
@@ -34,7 +36,7 @@ created(){
         this.errored = true
       })
       .finally(() => this.loading = false)
-	}
+	}  
 }
 </script>
 <style>
