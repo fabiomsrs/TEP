@@ -9,7 +9,7 @@
 
     <b-table striped hover :fields="fields" :items="info">
       <template slot="notas" slot-scope="data">
-      <a :href="data.value">notas</a>
+      <router-link :to="data.value">notas</router-link>      
       </template>
     </b-table>
 
@@ -32,12 +32,12 @@
         }),     
       mounted () {
         axios
-          .get('http://localhost/students/')
+          .get('http://localhost:8000/students/')
           .then(response => {            
             this.loading = false
             console.log(response.data.results)            
             for(var i = 0; i<response.data.results.length; i++){              
-              this.info.push({'name':response.data.results[i].name, 'notas':"http://localhost:8080/student/"+response.data.results[i].pk+"/grades"})
+              this.info.push({'name':response.data.results[i].name, 'notas':"/student/"+response.data.results[i].pk+"/grades"})
             }            
             console.log(this.info)
           })

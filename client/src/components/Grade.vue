@@ -23,7 +23,7 @@ data () {
 },
 mounted () {
   axios
-    .get('http://localhost/grades/')
+    .get('http://localhost:8000/grades/')
     .then(response => {
       this.loading = false
       console.log(response.data)
